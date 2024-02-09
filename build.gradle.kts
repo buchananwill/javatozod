@@ -19,3 +19,19 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
+
+val runDtoParser by tasks.registering(JavaExec::class) {
+    group = "custom"
+    description = "Runs DtoParser."
+    mainClass.set("org.javatozod.DtoParser")
+    classpath = sourceSets["main"].runtimeClasspath
+}
+
+
+tasks.withType<JavaCompile> {
+    options.annotationProcessorPath = configurations["annotationProcessor"]
+}
+
+tasks.named("compileJava") {
+    finalizedBy("runDtoParser")
+}
